@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ТЕЛО — программа осознанных отношений с собой</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAF8F5;
+      --surface: #FFFFFF;
+      --surface-hover: #F5F1EC;
+      --sidebar-bg: #2D2926;
+      --sidebar-text: #E8E2DB;
+      --sidebar-active: #B85C38;
+      --primary: #B85C38;
+      --primary-light: #D4845F;
+      --primary-ghost: rgba(184, 92, 56, 0.08);
+      --primary-ghost-hover: rgba(184, 92, 56, 0.14);
+      --secondary: #7D8471;
+      --secondary-light: #A3AC96;
+      --accent: #D4A574;
+      --accent-light: #E8C9A4;
+      --text: #2D2926;
+      --text-secondary: #6B635C;
+      --text-muted: #9A9590;
+      --border: #E8E2DB;
+      --border-light: #F0EBE5;
+      --success: #6B8F5E;
+      --warning: #C9963A;
+      --danger: #B85050;
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-sm: 0 1px 3px rgba(45,41,38,0.04), 0 1px 2px rgba(45,41,38,0.06);
+      --shadow: 0 4px 12px rgba(45,41,38,0.06), 0 1px 4px rgba(45,41,38,0.04);
+      --shadow-lg: 0 12px 32px rgba(45,41,38,0.08), 0 4px 12px rgba(45,41,38,0.04);
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Outfit', -apple-system, sans-serif;
+      --font-hand: 'Caveat', cursive;
+      --sidebar-w: 260px;
+      --header-h: 0px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar-logo {
+      padding: 32px 28px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .sidebar-logo h1 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: #F5F0E8;
+      font-weight: 400;
+    }
+
+    .sidebar-logo p {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: var(--sidebar-text);
+      transition: all 0.2s ease;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+    }
+
+    .nav-item.active {
+      background: var(--sidebar-active);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .nav-item.active svg { opacity: 1; }
+
+    .sidebar-footer {
+      padding: 20px 28px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-footer .week-indicator {
+      font-family: var(--font-hand);
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    /* --- MAIN --- */
+    .main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+      padding: 40px 48px 60px;
+      max-width: calc(100% - var(--sidebar-w));
+    }
+
+    .page { display: none; animation: fadeIn 0.35s ease; }
+    .page.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- TYPOGRAPHY --- */
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 36px;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    /* --- CARDS --- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all 0.2s ease;
+    }
+
+    .card:hover { box-shadow: var(--shadow); }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* --- DASHBOARD --- */
+    .dash-hero {
+      background: linear-gradient(135deg, #2D2926 0%, #4A3F38 60%, #5C4A3D 100%);
+      border-radius: var(--radius-xl);
+      padding: 44px 48px;
+      color: #F5F0E8;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dash-hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(184,92,56,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .dash-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: 20%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(212,165,116,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .dash-hero-content { position: relative; z-index: 1; }
+
+    .dash-hero .greeting {
+      font-family: var(--font-hand);
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .dash-hero h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .dash-hero p {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      max-width: 500px;
+      line-height: 1.7;
+    }
+
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-card .stat-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    .dash-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .dash-section .card { height: 100%; }
+
+    .dash-task-list { list-style: none; }
+
+    .dash-task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.92rem;
+    }
+
+    .dash-task-item:last-child { border-bottom: none; }
+
+    .dash-task-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      background: none;
+    }
+
+    .dash-task-check:hover { border-color: var(--primary); }
+
+    .dash-task-check.done {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .dash-task-check.done::after {
+      content: '✓';
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .dash-task-text.done {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    /* --- PROGRAM --- */
+    .program-timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .program-timeline::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .week-block {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .week-dot {
+      position: absolute;
+      left: -32px;
+      top: 18px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      z-index: 1;
+    }
+
+    .week-block.current .week-dot {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 0 4px var(--primary-ghost);
+    }
+
+    .week-block.completed .week-dot {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+
+    .week-block.integration .week-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .week-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .week-card:hover {
+      box-shadow: var(--shadow);
+      border-color: var(--primary-light);
+    }
+
+    .week-block.current .week-card {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .week-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .week-card-header h3 { margin-bottom: 0; font-size: 1.15rem; }
+
+    .week-tag {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tag-physiology { background: #E8F0E5; color: #4A6B3F; }
+    .tag-psychology { background: #EDE5F0; color: #6B4A7A; }
+    .tag-behavior { background: #E5EBF0; color: #3F5A6B; }
+    .tag-integration { background: #F0EBE5; color: #8A7560; }
+
+    .week-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .week-detail {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .week-detail.open { display: block; animation: fadeIn 0.3s ease; }
+
+    .week-detail-section {
+      margin-bottom: 20px;
+    }
+
+    .week-detail-section h4 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .week-detail-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .week-detail-section li {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      padding-left: 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .week-detail-section li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .week-detail .exercise-card {
+      background: var(--primary-ghost);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 8px;
+    }
+
+    .exercise-card h5 {
+      font-family: var(--font-hand);
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .exercise-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* --- JOURNAL --- */
+    .journal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--primary-light); }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary-light);
+    }
+
+    .btn-ghost {
+      background: var(--primary-ghost);
+      color: var(--primary);
+    }
+
+    .btn-ghost:hover { background: var(--primary-ghost-hover); }
+
+    .journal-entries { display: flex; flex-direction: column; gap: 16px; }
+
+    .journal-entry {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      transition: all 0.2s ease;
+    }
+
+    .journal-entry:hover { box-shadow: var(--shadow-sm); }
+
+    .journal-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .journal-date {
+      font-family: var(--font-hand);
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+
+    .journal-entry-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .journal-entry-actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .journal-entry-actions button:hover { color: var(--primary); }
+
+    .journal-scales {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .scale-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .scale-label { color: var(--text-muted); font-weight: 500; }
+
+    .scale-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .scale-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .scale-dot.filled { background: var(--primary); }
+
+    .journal-content p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .journal-emotions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .emotion-tag {
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--primary-ghost);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* --- MODAL / FORM --- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(45,41,38,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      padding: 36px 40px;
+      max-width: 560px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal h3 {
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+    }
+
+    .form-group textarea { min-height: 80px; resize: vertical; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .range-input {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-input input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      border: none;
+      padding: 0;
+    }
+
+    .range-input input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(184,92,56,0.3);
+    }
+
+    .range-value {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--primary);
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .emotion-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .emotion-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .emotion-btn:hover { border-color: var(--primary); }
+
+    .emotion-btn.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    /* --- CHECKLISTS --- */
+    .checklist-week-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .week-nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .week-nav-btn:hover { border-color: var(--primary); }
+
+    .week-nav-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .week-nav-btn.completed {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+
+    .checklist-items { display: flex; flex-direction: column; gap: 8px; }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .checklist-item:hover {
+      border-color: var(--primary-light);
+      background: var(--surface-hover);
+    }
+
+    .checklist-item.checked {
+      opacity: 0.7;
+    }
+
+    .checklist-item .check-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      margin-top: 1px;
+    }
+
+    .checklist-item.checked .check-box {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .checklist-item.checked .check-box::after {
+      content: '✓';
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .checklist-item .check-text {
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .checklist-item.checked .check-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .checklist-progress {
+      margin-bottom: 24px;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+
+    .progress-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--border-light);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .progress-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+      min-width: 40px;
+    }
+
+    /* --- TRACKERS --- */
+    .tracker-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .tracker-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+
+    .tracker-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .tracker-bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 120px;
+      padding-top: 8px;
+    }
+
+    .tracker-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      min-height: 4px;
+      transition: height 0.3s ease;
+      position: relative;
+    }
+
+    .tracker-bar.primary { background: var(--primary); }
+    .tracker-bar.secondary { background: var(--secondary-light); }
+    .tracker-bar.accent { background: var(--accent); }
+
+    .mini-calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .mini-cal-day {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .mini-cal-day.has-entry { background: var(--primary-ghost); color: var(--primary); font-weight: 600; }
+    .mini-cal-day.today { border: 1px solid var(--primary); }
+
+    .streak-display {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .streak-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .streak-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* --- RESOURCES --- */
+    .resource-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      transition: all 0.2s ease;
+    }
+
+    .resource-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .resource-card .resource-category {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .resource-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .resource-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* --- EMPTY STATE --- */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-state p {
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    /* --- MOBILE TOGGLE --- */
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      border: none;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+
+    /* --- SCROLLBAR --- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1024px) {
+      .dash-stats { grid-template-columns: repeat(2, 1fr); }
+      .dash-sections { grid-template-columns: 1fr; }
+      .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .tracker-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-toggle { display: flex; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; padding: 72px 20px 40px; max-width: 100%; }
+      .dash-hero { padding: 28px 24px; }
+      .dash-hero h2 { font-size: 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .card-grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* --- SETTINGS / NAME --- */
+    .name-setup {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .name-setup-inner {
+      max-width: 400px;
+      padding: 40px;
+    }
+
+    .name-setup h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .name-setup p {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .name-setup input {
+      width: 100%;
+      padding: 14px 20px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 20px;
+      background: var(--surface);
+    }
+
+    .name-setup input:focus { border-color: var(--primary); }
+
+    .name-setup .btn { width: 100%; justify-content: center; padding: 14px; font-size: 1rem; }
+
+    /* --- QUOTE --- */
+    .daily-quote {
+      font-family: var(--font-hand);
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      padding: 20px 24px;
+      background: var(--primary-ghost);
+      border-radius: var(--radius);
+      margin-bottom: 32px;
+      line-height: 1.5;
+      border-left: 3px solid var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAME SETUP -->
+  <div class="name-setup" id="nameSetup">
+    <div class="name-setup-inner">
+      <h2>ТЕЛО</h2>
+      <p>12 недель осознанных отношений с собой — физиология, психология, поведение</p>
+      <input type="text" id="nameInput" placeholder="как тебя зовут?" autocomplete="off">
+      <button class="btn btn-primary" onclick="saveName()">начать программу</button>
+    </div>
+  </div>
+
+  <!-- MOBILE TOGGLE -->
+  <button class="mobile-toggle" onclick="toggleSidebar()">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 6h14M3 10h14M3 14h14"/>
+    </svg>
+  </button>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <h1>ТЕЛО</h1>
+      <p>12 недель с собой</p>
+    </div>
+    <div class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M9 22V12h6v10"/></svg>
+        Главная
+      </button>
+      <button class="nav-item" data-page="program" onclick="showPage('program')">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Программа
+      </button>
+      <button class="nav-item" data-page="journal" onclick="showPage('journal')">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
+        Дневник
+      </button>
+      <button class="nav-item" data-page="checklists" onclick="showPage('checklists')">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Чек-листы
+      </button>
+      <button class="nav-item" data-page="trackers" onclick="showPage('trackers')">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        Трекеры
+      </button>
+      <button class="nav-item" data-page="resources" onclick="showPage('resources')">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Ресурсы
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="week-indicator" id="sidebarWeek">неделя 1 из 12</div>
+      <div id="sidebarDate"></div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="dash-hero">
+        <div class="dash-hero-content">
+          <div class="greeting" id="greeting"></div>
+          <h2 id="dashTitle"></h2>
+          <p id="dashDesc"></p>
+        </div>
+      </div>
+
+      <div class="dash-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="statWeek">1</div>
+          <div class="stat-label">неделя</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statEntries">0</div>
+          <div class="stat-label">записей</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statChecked">0%</div>
+          <div class="stat-label">чек-лист</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statStreak">0</div>
+          <div class="stat-label">дней подряд</div>
+        </div>
+      </div>
+
+      <div id="dailyQuote" class="daily-quote"></div>
+
+      <div class="dash-sections">
+        <div class="dash-section">
+          <div class="card">
+            <h3>задачи на сегодня</h3>
+            <ul class="dash-task-list" id="dashTasks"></ul>
+          </div>
+        </div>
+        <div class="dash-section">
+          <div class="card">
+            <h3>фокус недели</h3>
+            <div id="dashFocus"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRAM -->
+    <div class="page" id="page-program">
+      <h2 class="page-title">Программа</h2>
+      <p class="page-subtitle">12 недель: три блока по три недели работы + неделя интеграции. физиология → психология → поведение, каждый виток глубже</p>
+      <div class="program-timeline" id="programTimeline"></div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="page" id="page-journal">
+      <div class="journal-header">
+        <div>
+          <h2 class="page-title">Дневник</h2>
+          <p class="page-subtitle">записывай приёмы пищи, эмоции и наблюдения — это главный инструмент осознанности</p>
+        </div>
+        <button class="btn btn-primary" onclick="openJournalModal()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12"/></svg>
+          новая запись
+        </button>
+      </div>
+      <div class="journal-entries" id="journalEntries"></div>
+    </div>
+
+    <!-- CHECKLISTS -->
+    <div class="page" id="page-checklists">
+      <h2 class="page-title">Чек-листы</h2>
+      <p class="page-subtitle">задания на каждую неделю — делай в своём темпе, без перфекционизма</p>
+      <div class="checklist-week-nav" id="checklistNav"></div>
+      <div class="checklist-progress" id="checklistProgress"></div>
+      <div class="checklist-items" id="checklistItems"></div>
+    </div>
+
+    <!-- TRACKERS -->
+    <div class="page" id="page-trackers">
+      <h2 class="page-title">Трекеры</h2>
+      <p class="page-subtitle">визуализация прогресса — не для контроля, а для осознанности</p>
+      <div class="tracker-grid" id="trackerGrid"></div>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="page" id="page-resources">
+      <h2 class="page-title">Ресурсы</h2>
+      <p class="page-subtitle">техники, практики и знания для работы с телом и мышлением</p>
+      <div class="card-grid" id="resourceGrid"></div>
+    </div>
+  </main>
+
+  <!-- JOURNAL MODAL -->
+  <div class="modal-overlay" id="journalModal">
+    <div class="modal">
+      <h3>Запись в дневник</h3>
+      <div class="form-group">
+        <label>что ты ел(а)</label>
+        <textarea id="jFood" placeholder="опиши, что ты ел(а)..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>голод до еды</label>
+          <div class="range-input">
+            <input type="range" id="jHunger" min="1" max="10" value="5" oninput="document.getElementById('jHungerVal').textContent=this.value">
+            <span class="range-value" id="jHungerVal">5</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>насыщение после</label>
+          <div class="range-input">
+            <input type="range" id="jSatiation" min="1" max="10" value="5" oninput="document.getElementById('jSatiationVal').textContent=this.value">
+            <span class="range-value" id="jSatiationVal">5</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>эмоции</label>
+        <div class="emotion-selector" id="emotionSelector"></div>
+      </div>
+      <div class="form-group">
+        <label>это был голод физический или эмоциональный?</label>
+        <select id="jHungerType">
+          <option value="">не уверен(а)</option>
+          <option value="physical">физический</option>
+          <option value="emotional">эмоциональный</option>
+          <option value="mixed">смешанный</option>
+          <option value="social">социальный</option>
+          <option value="habitual">по привычке</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>заметки / ощущения в теле</label>
+        <textarea id="jNotes" placeholder="что ты чувствуешь? что заметил(а)?"></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeJournalModal()">отмена</button>
+        <button class="btn btn-primary" onclick="saveJournalEntry()">сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
