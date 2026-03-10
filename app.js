@@ -2,6 +2,17 @@
 //  ТЕЛО — 12-week program data & application
 // ═══════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════
+//  SUPABASE — замени на свои данные
+//  → supabase.com → создай проект
+//  → Settings → API → Project URL + anon key
+//  → SQL Editor → выполни supabase-setup.sql
+//  → Authentication → Settings → отключи Confirm email
+// ═══════════════════════════════════════════════
+const SUPABASE_URL = 'https://rvyfkqzercbodzqfngwa.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_beQn-k-VBvosB07QjNgqow_DUKR7p6f';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const EMOTIONS = [
   'спокойствие', 'радость', 'тревога', 'грусть', 'злость',
   'скука', 'усталость', 'вина', 'стыд', 'одиночество',
@@ -464,56 +475,50 @@ const RESOURCES = [
 // ═══════════════════════════════════════════════
 
 const STORAGE_KEY = 'telo_app_data';
+let currentUser = null;
 
-function loadState() {
+function defaultState() {
+  return { name: '', startDate: null, currentWeek: 1, journal: [], checklists: {}, settings: {} };
+}
+
+function loadStateLocal() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
   } catch(e) {}
-  return {
-    name: '',
-    startDate: null,
-    currentWeek: 1,
-    journal: [],
-    checklists: {},
-    settings: {}
-  };
+  return defaultState();
 }
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-let state = loadState();
+let state = defaultState();
 
 // ═══════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!state.name) {
-    document.getElementById('nameSetup').style.display = 'flex';
-  } else {
-    document.getElementById('nameSetup').style.display = 'none';
-    initApp();
-  }
-
+document.addEventListener('DOMContentLoaded', async () => {
   buildEmotionSelector();
   setupModalClose();
-});
 
-function saveName() {
-  const name = document.getElementById('nameInput').value.trim();
-  if (!name) return;
-  state.name = name;
-  state.startDate = new Date().toISOString().split('T')[0];
-  saveState();
-  document.getElementById('nameSetup').style.display = 'none';
-  initApp();
-}
-
-document.getElementById('nameInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') saveName();
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    state = loadStateLocal();
+    document.getElementById('authScreen').style.display = 'none';
+    initApp();
+    loadFromSupabase().then(() => {
+      calculateCurrentWeek();
+      renderDashboard();
+      renderJournal();
+      renderChecklists();
+      renderTrackers();
+    }).catch(() => {});
+  } else {
+    document.getElementById('authScreen').style.display = 'flex';
+  }
 });
 
 function initApp() {
@@ -525,6 +530,161 @@ function initApp() {
   renderTrackers();
   renderResources();
   updateSidebarFooter();
+}
+
+// ═══════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════
+
+function showAuthTab(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'flex' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'flex' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('authError').textContent = '';
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  const errorEl = document.getElementById('authError');
+  btn.disabled = true;
+  btn.textContent = 'загрузка...';
+  errorEl.textContent = '';
+  errorEl.style.color = '';
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({
+      email: document.getElementById('loginEmail').value.trim(),
+      password: document.getElementById('loginPassword').value,
+    });
+    if (error) throw error;
+    currentUser = data.user;
+    await loadFromSupabase();
+    document.getElementById('authScreen').style.display = 'none';
+    initApp();
+  } catch (err) {
+    errorEl.textContent = translateAuthError(err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'войти';
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const name = document.getElementById('regName').value.trim();
+  const errorEl = document.getElementById('authError');
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'загрузка...';
+  errorEl.textContent = '';
+  errorEl.style.color = '';
+
+  if (!name) { errorEl.textContent = 'введи имя'; btn.disabled = false; btn.textContent = 'создать аккаунт'; return; }
+
+  try {
+    const { data, error } = await sb.auth.signUp({
+      email: document.getElementById('regEmail').value.trim(),
+      password: document.getElementById('regPassword').value,
+    });
+    if (error) throw error;
+
+    if (!data.session) {
+      errorEl.textContent = 'проверь почту — отправили ссылку для подтверждения';
+      errorEl.style.color = 'var(--success)';
+      btn.disabled = false;
+      btn.textContent = 'создать аккаунт';
+      return;
+    }
+
+    currentUser = data.user;
+    const startDate = new Date().toISOString().split('T')[0];
+    await sb.from('profiles').insert({ id: currentUser.id, name, start_date: startDate, checklists: {} });
+
+    state = defaultState();
+    state.name = name;
+    state.startDate = startDate;
+    saveState();
+    document.getElementById('authScreen').style.display = 'none';
+    initApp();
+  } catch (err) {
+    errorEl.textContent = translateAuthError(err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'создать аккаунт';
+  }
+}
+
+async function handleSignOut() {
+  await sb.auth.signOut();
+  currentUser = null;
+  state = defaultState();
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('authScreen').style.display = 'flex';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-dashboard').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('[data-page="dashboard"]').classList.add('active');
+}
+
+function translateAuthError(msg) {
+  const map = {
+    'Invalid login credentials': 'неверный email или пароль',
+    'User already registered': 'этот email уже зарегистрирован',
+    'Password should be at least 6 characters': 'пароль — минимум 6 символов',
+    'Unable to validate email address: invalid format': 'некорректный email',
+    'Email rate limit exceeded': 'слишком много попыток, подожди',
+    'Signup requires a valid password': 'введи пароль',
+  };
+  return map[msg] || msg;
+}
+
+// ═══════════════════════════════════════════════
+//  SUPABASE SYNC
+// ═══════════════════════════════════════════════
+
+async function loadFromSupabase() {
+  const { data: profile } = await sb.from('profiles')
+    .select('*').eq('id', currentUser.id).single();
+  if (profile) {
+    state.name = profile.name;
+    state.startDate = profile.start_date;
+    state.checklists = profile.checklists || {};
+  }
+  const { data: entries } = await sb.from('journal_entries')
+    .select('*').eq('user_id', currentUser.id)
+    .order('timestamp', { ascending: false });
+  state.journal = (entries || []).map(e => ({
+    id: e.id, timestamp: e.timestamp, date: e.date, food: e.food,
+    hunger: e.hunger, satiation: e.satiation, hungerType: e.hunger_type,
+    emotions: e.emotions || [], notes: e.notes,
+  }));
+  saveState();
+}
+
+async function syncProfile() {
+  if (!currentUser) return;
+  sb.from('profiles').update({ checklists: state.checklists })
+    .eq('id', currentUser.id).then(() => {});
+}
+
+async function syncNewJournalEntry(entry) {
+  if (!currentUser) return;
+  const { data } = await sb.from('journal_entries').insert({
+    user_id: currentUser.id, timestamp: entry.timestamp, date: entry.date,
+    food: entry.food, hunger: entry.hunger, satiation: entry.satiation,
+    hunger_type: entry.hungerType, emotions: entry.emotions, notes: entry.notes,
+  }).select().single();
+  if (data) {
+    const local = state.journal.find(e => e.timestamp === entry.timestamp);
+    if (local) local.id = data.id;
+    saveState();
+  }
+}
+
+async function syncDeleteJournalEntry(id) {
+  if (!currentUser) return;
+  sb.from('journal_entries').delete().eq('id', id).then(() => {});
 }
 
 // ═══════════════════════════════════════════════
@@ -610,6 +770,8 @@ function renderDashboard() {
       <p>${week.content.practice.description}</p>
     </div>
   `;
+
+  renderWeekIntro();
 }
 
 function toggleDashCheck(index) {
@@ -619,6 +781,7 @@ function toggleDashCheck(index) {
   }
   state.checklists[weekKey][index] = !state.checklists[weekKey][index];
   saveState();
+  syncProfile();
   renderDashboard();
   renderChecklists();
 }
@@ -784,6 +947,7 @@ function saveJournalEntry() {
   };
   state.journal.push(entry);
   saveState();
+  syncNewJournalEntry(entry);
   closeJournalModal();
   renderJournal();
   renderDashboard();
@@ -795,6 +959,7 @@ function deleteJournalEntry(displayIndex) {
   const entryId = sorted[displayIndex].id;
   state.journal = state.journal.filter(e => e.id !== entryId);
   saveState();
+  syncDeleteJournalEntry(entryId);
   renderJournal();
   renderDashboard();
   renderTrackers();
@@ -868,6 +1033,7 @@ function toggleCheck(index) {
   }
   state.checklists[weekKey][index] = !state.checklists[weekKey][index];
   saveState();
+  syncProfile();
   renderChecklists();
   if (activeChecklistWeek === state.currentWeek) renderDashboard();
 }
@@ -1066,6 +1232,63 @@ function renderResources() {
       <p>${r.description}</p>
     </div>
   `).join('');
+}
+
+// ═══════════════════════════════════════════════
+//  WEEK INTRO
+// ═══════════════════════════════════════════════
+
+function renderWeekIntro() {
+  const week = PROGRAM[state.currentWeek - 1];
+  const el = document.getElementById('weekIntro');
+  const theory = week.content.theory.slice(0, 3);
+  const resources = getWeekResources(state.currentWeek);
+  const practiceShort = week.content.practice.description.split('.').slice(0, 2).join('.') + '.';
+
+  el.innerHTML = `
+    <h3>
+      <span style="font-size:1.3rem">📖</span>
+      с чего начать: неделя ${state.currentWeek}
+    </h3>
+    <div class="week-intro-items">
+      <div class="week-intro-item">
+        <span class="intro-arrow">→</span>
+        <div><strong>изучи:</strong> ${theory.map(t => t.split(':')[0].split('—')[0].trim().toLowerCase()).join(' · ')}</div>
+      </div>
+      <div class="week-intro-item">
+        <span class="intro-arrow">→</span>
+        <div><strong>практика:</strong> ${week.content.practice.title.replace('Практика: ', '').toLowerCase()} — ${practiceShort.toLowerCase()}</div>
+      </div>
+      ${resources.length ? `
+      <div class="week-intro-item">
+        <span class="intro-arrow">→</span>
+        <div><strong>почитай:</strong> ${resources.map(r => `${r.title} (${r.author})`).join(', ')}</div>
+      </div>` : ''}
+      <div class="week-intro-item">
+        <span class="intro-arrow">→</span>
+        <div><strong>первый шаг:</strong> ${week.checklist[0].charAt(0).toLowerCase() + week.checklist[0].slice(1)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function getWeekResources(weekNum) {
+  const map = {
+    1: ['Шкала голода 1—10', 'Гарвардская тарелка'],
+    2: ['Дофаминовая петля привычек'],
+    3: ['STOP перед едой', '5-4-3-2-1 заземление', 'Дыхание 4-7-8'],
+    4: [],
+    5: ['Intuitive Eating', 'Set Point Theory'],
+    6: ['TIPP для острой тревоги', 'Тело хранит счёт'],
+    7: ['Body Scan'],
+    8: [],
+    9: ['Дофаминовая петля привычек', 'Set Point Theory'],
+    10: ['Self-Compassion'],
+    11: [],
+    12: [],
+  };
+  const titles = map[weekNum] || [];
+  return RESOURCES.filter(r => titles.includes(r.title));
 }
 
 // ═══════════════════════════════════════════════

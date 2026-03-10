@@ -1179,17 +1179,140 @@
       line-height: 1.5;
       border-left: 3px solid var(--primary);
     }
+
+    /* --- AUTH --- */
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 24px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: var(--bg);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .auth-tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .auth-form input {
+      text-align: left;
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+
+    .auth-error {
+      font-size: 0.85rem;
+      color: var(--danger);
+      margin-top: 12px;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    /* --- WEEK INTRO --- */
+    .week-intro {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+    }
+
+    .week-intro h3 {
+      font-size: 1.15rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .week-intro-items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .week-intro-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .week-intro-item .intro-arrow {
+      color: var(--primary);
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .week-intro-item strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* --- SIDEBAR LOGOUT --- */
+    .sidebar-logout {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      margin-top: 8px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .sidebar-logout:hover { color: var(--danger); }
   </style>
 </head>
 <body>
 
-  <!-- NAME SETUP -->
-  <div class="name-setup" id="nameSetup">
-    <div class="name-setup-inner">
+  <!-- AUTH SCREEN -->
+  <div class="name-setup" id="authScreen">
+    <div class="name-setup-inner" style="max-width:420px">
       <h2>ТЕЛО</h2>
       <p>12 недель осознанных отношений с собой — физиология, психология, поведение</p>
-      <input type="text" id="nameInput" placeholder="как тебя зовут?" autocomplete="off">
-      <button class="btn btn-primary" onclick="saveName()">начать программу</button>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="showAuthTab('login')">войти</button>
+        <button class="auth-tab" id="tabRegister" onclick="showAuthTab('register')">создать аккаунт</button>
+      </div>
+      <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+        <input type="email" id="loginEmail" placeholder="email" required autocomplete="email">
+        <input type="password" id="loginPassword" placeholder="пароль" required autocomplete="current-password">
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:1rem">войти</button>
+      </form>
+      <form id="registerForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">
+        <input type="text" id="regName" placeholder="как тебя зовут?" required autocomplete="name">
+        <input type="email" id="regEmail" placeholder="email" required autocomplete="email">
+        <input type="password" id="regPassword" placeholder="пароль (мин. 6 символов)" required minlength="6" autocomplete="new-password">
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:1rem">создать аккаунт</button>
+      </form>
+      <div class="auth-error" id="authError"></div>
     </div>
   </div>
 
@@ -1235,6 +1358,10 @@
     <div class="sidebar-footer">
       <div class="week-indicator" id="sidebarWeek">неделя 1 из 12</div>
       <div id="sidebarDate"></div>
+      <button class="sidebar-logout" onclick="handleSignOut()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        выйти
+      </button>
     </div>
   </nav>
 
@@ -1270,6 +1397,7 @@
         </div>
       </div>
 
+      <div class="week-intro" id="weekIntro"></div>
       <div id="dailyQuote" class="daily-quote"></div>
 
       <div class="dash-sections">
@@ -1384,6 +1512,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>
