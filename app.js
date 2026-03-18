@@ -59,6 +59,12 @@ const PROGRAM = [
         description: '3 раза в день остановись на 30 секунд. Закрой глаза. Спроси тело: "какой у меня сейчас голод по шкале от 1 до 10?" Запиши цифру в дневник. Не пытайся угадать "правильный" ответ — любой ответ правильный.'
       }
     },
+    materials: [
+      { title: 'Тарелка здорового питания', type: 'article', source: 'Harvard T.H. Chan', url: 'https://www.hsph.harvard.edu/nutritionsource/healthy-eating-plate/' },
+      { title: '10 принципов интуитивного питания', type: 'article', source: 'Intuitive Eating', url: 'https://www.intuitiveeating.org/10-principles-of-intuitive-eating/' },
+      { title: 'Что такое осознанное питание', type: 'article', source: 'Harvard Health', url: 'https://www.health.harvard.edu/staying-healthy/8-steps-to-mindful-eating' },
+      { title: 'Шкала голода и насыщения', type: 'tool', source: 'практика', url: 'https://en.wikipedia.org/wiki/Intuitive_eating#Hunger_scale' },
+    ],
     checklist: [
       'Определить свою текущую шкалу голода и насыщения',
       'Записать 5 приёмов пищи в дневник с наблюдениями',
@@ -89,6 +95,11 @@ const PROGRAM = [
         description: 'Каждый раз, когда ты ешь не по голоду (или хочешь есть не по голоду), запиши: что произошло за 15 минут до → что ты почувствовал(а) → что сделал(а). Через неделю у тебя будет карта паттернов.'
       }
     },
+    materials: [
+      { title: 'Петля привычки — как работают привычки', type: 'article', source: 'James Clear', url: 'https://jamesclear.com/three-steps-habit-change' },
+      { title: 'Tiny Habits — маленькие привычки', type: 'video', source: 'TEDx / BJ Fogg', url: 'https://www.youtube.com/watch?v=AdKUJxjn-R8' },
+      { title: 'Сила привычки — конспект книги Дахигга', type: 'article', source: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/The_Power_of_Habit' },
+    ],
     checklist: [
       'Вести дневник питания каждый день',
       'Записать 3 триггера переедания или еды не по голоду',
@@ -119,6 +130,12 @@ const PROGRAM = [
         description: 'Когда чувствуешь импульс есть не по голоду: S — остановись. T — сделай вдох. O — наблюдай: что я чувствую? что мне нужно на самом деле? P — выбери осознанно. Если после этого хочешь есть — ешь. Без вины.'
       }
     },
+    materials: [
+      { title: 'Колесо эмоций Плутчика', type: 'tool', source: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Robert_Plutchik#Plutchik\'s_wheel_of_emotions' },
+      { title: 'Самосострадание — упражнения', type: 'article', source: 'Kristin Neff', url: 'https://self-compassion.org/category/exercises/' },
+      { title: 'DBT навыки: что это и как работает', type: 'article', source: 'Psychology Today', url: 'https://www.psychologytoday.com/us/therapy-types/dialectical-behavior-therapy' },
+      { title: 'Дыхание 4-7-8 — видеоинструкция', type: 'video', source: 'Andrew Weil', url: 'https://www.youtube.com/watch?v=PmBYdfv5RSk' },
+    ],
     checklist: [
       'Различить эмоциональный и физический голод хотя бы 2 раза',
       'Попробовать технику STOP перед едой 3 раза',
@@ -147,6 +164,10 @@ const PROGRAM = [
         description: 'Напиши себе письмо от имени мудрой, сострадательной части себя. Поддержи себя. Отметь, что уже сделано. Обними свои сложности. Это письмо — для тебя.'
       }
     },
+    materials: [
+      { title: 'Нейропластичность — как мозг меняется', type: 'video', source: 'TED-Ed', url: 'https://www.youtube.com/watch?v=ELpfYCZa87g' },
+      { title: 'Как вести рефлексивный дневник', type: 'article', source: 'Positive Psychology', url: 'https://positivepsychology.com/journaling-for-mindfulness/' },
+    ],
     checklist: [
       'Записать 3 главных инсайта за первый блок',
       'Повторить любимую практику из первых трёх недель',
@@ -176,6 +197,11 @@ const PROGRAM = [
         description: 'Выбери один «запрещённый» продукт. Купи его. Положи на видное место. Ешь его, когда хочешь. Наблюдай: что происходит с тягой через 3-5 дней? Запиши наблюдения.'
       }
     },
+    materials: [
+      { title: 'Intuitive Eating — книга (обзор)', type: 'book', source: 'Tribole & Resch', url: 'https://www.intuitiveeating.org/resources/' },
+      { title: 'Ellyn Satter — компетентное питание', type: 'article', source: 'Ellyn Satter Institute', url: 'https://www.ellynsatterinstitute.org/how-to-eat/eating-competence/' },
+      { title: 'Почему диеты не работают', type: 'video', source: 'TED / Sandra Aamodt', url: 'https://www.youtube.com/watch?v=jn0Ygp7pMbA' },
+    ],
     checklist: [
       'Определить свой тип переедания (или несколько)',
       'Легализовать один «запрещённый» продукт',
@@ -206,6 +232,12 @@ const PROGRAM = [
         description: 'T — опусти лицо в холодную воду на 30 сек (активирует рефлекс ныряния). I — 10 приседаний или бег на месте 1 мин. P — дыхание 4-7-8. P — расслабь последовательно каждую группу мышц от ног до лица.'
       }
     },
+    materials: [
+      { title: 'Окно толерантности — что это', type: 'article', source: 'NICABM', url: 'https://www.nicabm.com/how-to-help-your-clients-understand-their-window-of-tolerance/' },
+      { title: 'Стыд и уязвимость', type: 'video', source: 'TED / Brené Brown', url: 'https://www.youtube.com/watch?v=iCvmsMzlF7o' },
+      { title: 'Прогрессивная мышечная релаксация', type: 'video', source: 'медитация', url: 'https://www.youtube.com/watch?v=1nZEdqcGVzo' },
+      { title: 'Тело хранит счёт — обзор книги', type: 'book', source: 'Бессел ван дер Колк', url: 'https://en.wikipedia.org/wiki/The_Body_Keeps_the_Score' },
+    ],
     checklist: [
       'Попробовать TIPP при тревоге хотя бы 1 раз',
       'Записать 3 ситуации, вызывающие стыд вокруг еды/тела',
@@ -236,6 +268,11 @@ const PROGRAM = [
         description: 'Включи любимую музыку. Двигайся как хочешь — без правил, без формы. Потянись. Потрясись. Покрутись. Замри. Послушай, что чувствует тело. Нет правильного способа. Есть только твой.'
       }
     },
+    materials: [
+      { title: 'Body Scan — медитация сканирования тела', type: 'video', source: 'Jon Kabat-Zinn', url: 'https://www.youtube.com/watch?v=_DTmGtznab4' },
+      { title: 'Интероцепция — чувствуем тело изнутри', type: 'article', source: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Interoception' },
+      { title: 'Joyful movement — движение без насилия', type: 'article', source: 'Intuitive Eating', url: 'https://www.intuitiveeating.org/10-principles-of-intuitive-eating/' },
+    ],
     checklist: [
       'Записать 5 видов движения, которые приносят удовольствие',
       'Сделать 5 минут «радостного движения» 3 раза на неделе',
@@ -265,6 +302,10 @@ const PROGRAM = [
         description: 'Запиши 5-7 принципов отношений с едой и телом, которые ты ХОЧЕШЬ (не «должен»). Напр.: «я ем, когда голодна», «я останавливаюсь, когда сыта, но не виню себя, если не получается», «движение — для радости».'
       }
     },
+    materials: [
+      { title: 'Гибкое мышление в питании', type: 'article', source: 'Psychology Today', url: 'https://www.psychologytoday.com/us/blog/eating-mindfully/201801/flexible-vs-rigid-dieting' },
+      { title: 'Как создать устойчивые привычки', type: 'video', source: 'James Clear', url: 'https://www.youtube.com/watch?v=PZ7lDrwYdZc' },
+    ],
     checklist: [
       'Написать 5-7 своих принципов отношений с едой/телом',
       'Выбрать 3 техники из программы, которые работают лучше всего',
@@ -294,6 +335,12 @@ const PROGRAM = [
         description: 'Запиши все источники стресса за последнюю неделю. Раздели на 3 колонки: могу изменить / могу изменить отношение / не могу повлиять. Для первой колонки — запиши один маленький шаг. Для второй — запиши новую интерпретацию. Третью — отпусти.'
       }
     },
+    materials: [
+      { title: 'Кортизол и стрессовое питание', type: 'article', source: 'Harvard Health', url: 'https://www.health.harvard.edu/staying-healthy/why-stress-causes-people-to-overeat' },
+      { title: 'Как сон влияет на аппетит', type: 'article', source: 'Sleep Foundation', url: 'https://www.sleepfoundation.org/physical-health/sleep-and-overeating' },
+      { title: 'Дофамин и привычки — нейронаука', type: 'video', source: 'Andrew Huberman', url: 'https://www.youtube.com/watch?v=QmOF0crdyRU' },
+      { title: 'Set Point Theory — вес тела', type: 'article', source: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Set_point_theory_(body_weight)' },
+    ],
     checklist: [
       'Провести аудит стресса (3 колонки)',
       'Отследить связь «стресс → тяга к еде» 2 раза',
@@ -324,6 +371,12 @@ const PROGRAM = [
         description: 'Встань перед зеркалом. Посмотри на себя. Скажи 5 вещей, за которые ты благодарен(на) своему телу — НЕ за внешность, а за функции. «Спасибо, руки, что вы обнимаете. Спасибо, ноги, что вы несёте меня.»'
       }
     },
+    materials: [
+      { title: 'ACT — терапия принятия и ответственности', type: 'article', source: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Acceptance_and_commitment_therapy' },
+      { title: 'Сила уязвимости', type: 'video', source: 'TED / Brené Brown', url: 'https://www.youtube.com/watch?v=iCvmsMzlF7o' },
+      { title: 'Self-Compassion — книга (обзор)', type: 'book', source: 'Kristin Neff', url: 'https://self-compassion.org/the-three-elements-of-self-compassion-2/' },
+      { title: 'Образ тела — что это и как формируется', type: 'article', source: 'NEDC', url: 'https://nedc.com.au/eating-disorders/eating-disorders-explained/body-image/' },
+    ],
     checklist: [
       'Определить своё текущее место на спектре отношений с телом',
       'Практика благодарности телу перед зеркалом',
@@ -354,6 +407,11 @@ const PROGRAM = [
         description: 'Выбери одну повторяющуюся сложную ситуацию (напр. праздничный стол, стресс на работе). Запиши: 1) что обычно происходит 2) что я хочу сделать вместо этого 3) какая техника мне поможет 4) что я скажу себе, если не получится.'
       }
     },
+    materials: [
+      { title: 'Стадии изменений — модель Прохазки', type: 'article', source: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Transtheoretical_model' },
+      { title: 'Внутренний саботажник — как с ним работать', type: 'article', source: 'Psychology Today', url: 'https://www.psychologytoday.com/us/blog/evolution-the-self/201110/the-path-unconditional-self-acceptance' },
+      { title: 'Atomic Habits — сила маленьких изменений', type: 'video', source: 'James Clear', url: 'https://www.youtube.com/watch?v=PZ7lDrwYdZc' },
+    ],
     checklist: [
       'Составить план на одну сложную ситуацию',
       'Определить своего «внутреннего саботажника» — что он говорит?',
@@ -384,6 +442,11 @@ const PROGRAM = [
         description: 'Напиши себе письмо от имени себя через год. Опиши, какие у тебя отношения с едой и телом. Как ты живёшь. Что чувствуешь. Это не план — это намерение. Сохрани и перечитай через год.'
       }
     },
+    materials: [
+      { title: 'Когда обратиться к специалисту по РПП', type: 'article', source: 'NEDA', url: 'https://www.nationaleatingdisorders.org/help-support/contact-helpline/' },
+      { title: 'Intuitive Eating — все ресурсы', type: 'tool', source: 'Tribole & Resch', url: 'https://www.intuitiveeating.org/resources/' },
+      { title: 'Самосострадание — все практики', type: 'tool', source: 'Kristin Neff', url: 'https://self-compassion.org/category/exercises/' },
+    ],
     checklist: [
       'Написать письмо себе из будущего',
       'Записать 10 главных инсайтов за всю программу',
@@ -400,73 +463,85 @@ const RESOURCES = [
     category: 'книги',
     title: 'Intuitive Eating',
     author: 'Evelyn Tribole, Elyse Resch',
-    description: 'Базовая книга по осознанному питанию. 10 принципов, которые меняют отношения с едой навсегда. Есть перевод на русский.'
+    description: 'Базовая книга по осознанному питанию. 10 принципов, которые меняют отношения с едой навсегда. Есть перевод на русский.',
+    url: 'https://www.intuitiveeating.org/resources/'
   },
   {
     category: 'книги',
     title: 'Тело хранит счёт',
     author: 'Бессел ван дер Колк',
-    description: 'Как травма живёт в теле и как с ней работать. Фундаментальная работа о связи тела и психики.'
+    description: 'Как травма живёт в теле и как с ней работать. Фундаментальная работа о связи тела и психики.',
+    url: 'https://en.wikipedia.org/wiki/The_Body_Keeps_the_Score'
   },
   {
     category: 'книги',
     title: 'Self-Compassion',
     author: 'Kristin Neff',
-    description: 'Самосострадание как навык: доброта к себе, осознанность, общечеловечность. Практики и исследования.'
+    description: 'Самосострадание как навык: доброта к себе, осознанность, общечеловечность. Практики и исследования.',
+    url: 'https://self-compassion.org/the-three-elements-of-self-compassion-2/'
   },
   {
     category: 'техника',
     title: 'STOP перед едой',
     author: 'DBT-навык',
-    description: 'S — остановись. T — сделай вдох. O — наблюдай: что я чувствую? P — выбери осознанно. Универсальная техника паузы между импульсом и действием.'
+    description: 'S — остановись. T — сделай вдох. O — наблюдай: что я чувствую? P — выбери осознанно. Универсальная техника паузы между импульсом и действием.',
+    url: 'https://www.psychologytoday.com/us/therapy-types/dialectical-behavior-therapy'
   },
   {
     category: 'техника',
     title: 'TIPP для острой тревоги',
     author: 'DBT-навык',
-    description: 'Температура (холодная вода на лицо) → Интенсивная нагрузка (30 сек) → Ритмичное дыхание (4-7-8) → Парная мышечная релаксация.'
+    description: 'Температура (холодная вода на лицо) → Интенсивная нагрузка (30 сек) → Ритмичное дыхание (4-7-8) → Парная мышечная релаксация.',
+    url: 'https://www.psychologytoday.com/us/therapy-types/dialectical-behavior-therapy'
   },
   {
     category: 'техника',
     title: 'Дыхание 4-7-8',
     author: 'Andrew Weil',
-    description: 'Вдох 4 секунды → задержка 7 секунд → выдох 8 секунд. Активирует парасимпатическую нервную систему, снижает тревогу.'
+    description: 'Вдох 4 секунды → задержка 7 секунд → выдох 8 секунд. Активирует парасимпатическую нервную систему, снижает тревогу.',
+    url: 'https://www.youtube.com/watch?v=PmBYdfv5RSk'
   },
   {
     category: 'техника',
     title: '5-4-3-2-1 заземление',
     author: 'grounding technique',
-    description: 'Назови 5 вещей, которые видишь → 4 которые слышишь → 3 которые чувствуешь → 2 которые нюхаешь → 1 которую ощущаешь на вкус.'
+    description: 'Назови 5 вещей, которые видишь → 4 которые слышишь → 3 которые чувствуешь → 2 которые нюхаешь → 1 которую ощущаешь на вкус.',
+    url: 'https://www.urmc.rochester.edu/behavioral-health-partners/bhp-blog/april-2018/5-4-3-2-1-coping-technique-for-anxiety.aspx'
   },
   {
     category: 'практика',
     title: 'Шкала голода 1—10',
     author: 'Intuitive Eating',
-    description: '1 = голодный обморок, 5 = нейтрально, 10 = невыносимая переполненность. Цель — есть на 3-4, заканчивать на 6-7. Без жёстких правил.'
+    description: '1 = голодный обморок, 5 = нейтрально, 10 = невыносимая переполненность. Цель — есть на 3-4, заканчивать на 6-7. Без жёстких правил.',
+    url: 'https://www.intuitiveeating.org/10-principles-of-intuitive-eating/'
   },
   {
     category: 'практика',
     title: 'Body Scan',
     author: 'MBSR (Jon Kabat-Zinn)',
-    description: 'Лёжа или сидя, медленно перемещай внимание от ступней до макушки. Замечай ощущения без оценки. 5-15 минут.'
+    description: 'Лёжа или сидя, медленно перемещай внимание от ступней до макушки. Замечай ощущения без оценки. 5-15 минут.',
+    url: 'https://www.youtube.com/watch?v=_DTmGtznab4'
   },
   {
     category: 'наука',
     title: 'Set Point Theory',
     author: 'нейробиология',
-    description: 'Тело стремится к определённому весу через регуляцию аппетита и метаболизма. Диеты нарушают этот механизм, вызывая «эффект маятника».'
+    description: 'Тело стремится к определённому весу через регуляцию аппетита и метаболизма. Диеты нарушают этот механизм, вызывая «эффект маятника».',
+    url: 'https://en.wikipedia.org/wiki/Set_point_theory_(body_weight)'
   },
   {
     category: 'наука',
     title: 'Дофаминовая петля привычек',
     author: 'нейробиология',
-    description: 'Триггер → действие → награда → дофамин → закрепление. Понимание петли позволяет сознательно менять привычки, не борясь с собой.'
+    description: 'Триггер → действие → награда → дофамин → закрепление. Понимание петли позволяет сознательно менять привычки, не борясь с собой.',
+    url: 'https://jamesclear.com/three-steps-habit-change'
   },
   {
     category: 'наука',
     title: 'Гарвардская тарелка',
     author: 'Harvard T.H. Chan School',
-    description: '½ овощи и фрукты, ¼ цельные злаки, ¼ белок. Здоровые жиры. Вода. Простой визуальный ориентир без подсчётов.'
+    description: '½ овощи и фрукты, ¼ цельные злаки, ¼ белок. Здоровые жиры. Вода. Простой визуальный ориентир без подсчётов.',
+    url: 'https://www.hsph.harvard.edu/nutritionsource/healthy-eating-plate/'
   }
 ];
 
@@ -811,9 +886,27 @@ function calculateStreak() {
 
 function renderProgram() {
   const timeline = document.getElementById('programTimeline');
+  const typeIcons = { video: '▶', article: '✦', book: '◈', tool: '◎' };
   timeline.innerHTML = PROGRAM.map((week, i) => {
     const blockClass = i + 1 < state.currentWeek ? 'completed' : i + 1 === state.currentWeek ? 'current' : '';
     const integrationClass = week.type === 'integration' ? 'integration' : '';
+    const materialsHtml = (week.materials && week.materials.length) ? `
+      <div class="week-materials">
+        <h4>Где изучать</h4>
+        <div class="materials-grid">
+          ${week.materials.map(m => `
+            <a class="material-link" href="${m.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <div class="material-icon type-${m.type}">${typeIcons[m.type] || '→'}</div>
+              <div class="material-info">
+                <div class="material-title">${m.title}</div>
+                <div class="material-source">${m.source}</div>
+              </div>
+              <span class="material-arrow">↗</span>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    ` : '';
     return `
       <div class="week-block ${blockClass} ${integrationClass}">
         <div class="week-dot">${week.week}</div>
@@ -834,6 +927,7 @@ function renderProgram() {
               <h5>${week.content.practice.title}</h5>
               <p>${week.content.practice.description}</p>
             </div>
+            ${materialsHtml}
           </div>
         </div>
       </div>
@@ -1262,7 +1356,7 @@ function renderWeekIntro() {
       ${resources.length ? `
       <div class="week-intro-item">
         <span class="intro-arrow">→</span>
-        <div><strong>почитай:</strong> ${resources.map(r => `${r.title} (${r.author})`).join(', ')}</div>
+        <div><strong>почитай:</strong> ${resources.map(r => r.url ? `<a href="${r.url}" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:underline;text-underline-offset:2px">${r.title}</a> (${r.author})` : `${r.title} (${r.author})`).join(', ')}</div>
       </div>` : ''}
       <div class="week-intro-item">
         <span class="intro-arrow">→</span>
