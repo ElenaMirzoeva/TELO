@@ -806,6 +806,7 @@ function updateSidebarFooter() {
 // ═══════════════════════════════════════════════
 
 function renderDashboard() {
+  updateSidebarFooter();
   const hour = new Date().getHours();
   let greetWord = hour < 12 ? 'доброе утро' : hour < 17 ? 'добрый день' : 'добрый вечер';
   document.getElementById('greeting').textContent = `${greetWord}, ${state.name}`;
