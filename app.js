@@ -585,12 +585,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('authScreen').style.display = 'none';
     initApp();
     loadFromSupabase().then(() => {
+      console.log('[telo] supabase loaded, startDate:', state.startDate);
       calculateCurrentWeek();
       renderDashboard();
+      renderProgram();
       renderJournal();
       renderChecklists();
       renderTrackers();
-    }).catch(() => {});
+    }).catch(err => console.error('[telo] supabase load failed:', err));
   } else {
     document.getElementById('authScreen').style.display = 'flex';
   }
@@ -719,12 +721,19 @@ function translateAuthError(msg) {
 // ═══════════════════════════════════════════════
 
 async function loadFromSupabase() {
-  const { data: profile } = await sb.from('profiles')
+  const { data: profile, error: profileErr } = await sb.from('profiles')
     .select('*').eq('id', currentUser.id).single();
+  console.log('[telo] profile from supabase:', profile, profileErr);
   if (profile) {
     state.name = profile.name;
-    state.startDate = profile.start_date;
+    state.startDate = profile.start_date
+      || (profile.created_at && profile.created_at.split('T')[0])
+      || state.startDate;
     state.checklists = profile.checklists || {};
+    if (!profile.start_date && state.startDate) {
+      sb.from('profiles').update({ start_date: state.startDate })
+        .eq('id', currentUser.id).then(() => console.log('[telo] backfilled start_date'));
+    }
   }
   const { data: entries } = await sb.from('journal_entries')
     .select('*').eq('user_id', currentUser.id)
@@ -739,7 +748,9 @@ async function loadFromSupabase() {
 
 async function syncProfile() {
   if (!currentUser) return;
-  sb.from('profiles').update({ checklists: state.checklists })
+  const payload = { checklists: state.checklists };
+  if (state.startDate) payload.start_date = state.startDate;
+  sb.from('profiles').update(payload)
     .eq('id', currentUser.id).then(() => {});
 }
 
@@ -787,11 +798,18 @@ function toggleSidebar() {
 // ═══════════════════════════════════════════════
 
 function calculateCurrentWeek() {
-  if (!state.startDate) { state.currentWeek = 1; return; }
-  const start = new Date(state.startDate);
+  if (!state.startDate) {
+    console.warn('[telo] startDate is empty, defaulting to week 1');
+    state.currentWeek = 1;
+    return;
+  }
+  const parts = state.startDate.split('T')[0].split('-');
+  const start = new Date(+parts[0], +parts[1] - 1, +parts[2]);
   const now = new Date();
+  now.setHours(0, 0, 0, 0);
   const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
   state.currentWeek = Math.min(12, Math.max(1, Math.floor(diffDays / 7) + 1));
+  console.log(`[telo] startDate=${state.startDate}, diffDays=${diffDays}, week=${state.currentWeek}`);
 }
 
 function updateSidebarFooter() {
