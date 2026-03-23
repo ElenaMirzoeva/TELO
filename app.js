@@ -722,18 +722,30 @@ function translateAuthError(msg) {
 
 async function loadFromSupabase() {
   const { data: profile, error: profileErr } = await sb.from('profiles')
-    .select('*').eq('id', currentUser.id).single();
-  console.log('[telo] profile from supabase:', profile, profileErr);
+    .select('*').eq('id', currentUser.id).maybeSingle();
+  console.log('[telo] profile:', profile, 'err:', profileErr);
+
   if (profile) {
-    state.name = profile.name;
+    state.name = profile.name || state.name;
     state.startDate = profile.start_date
       || (profile.created_at && profile.created_at.split('T')[0])
       || state.startDate;
-    state.checklists = profile.checklists || {};
+    state.checklists = profile.checklists || state.checklists || {};
     if (!profile.start_date && state.startDate) {
       sb.from('profiles').update({ start_date: state.startDate })
         .eq('id', currentUser.id).then(() => console.log('[telo] backfilled start_date'));
     }
+  } else {
+    const fallbackDate = (currentUser.created_at && currentUser.created_at.split('T')[0])
+      || new Date().toISOString().split('T')[0];
+    if (!state.startDate) state.startDate = fallbackDate;
+    console.log('[telo] no profile found, creating one. fallbackDate:', fallbackDate);
+    await sb.from('profiles').upsert({
+      id: currentUser.id,
+      name: state.name || currentUser.email?.split('@')[0] || '',
+      start_date: state.startDate,
+      checklists: state.checklists || {}
+    });
   }
   const { data: entries } = await sb.from('journal_entries')
     .select('*').eq('user_id', currentUser.id)
