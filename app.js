@@ -581,7 +581,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
     currentUser = session.user;
+    console.log('[telo] user created_at:', currentUser.created_at);
     state = loadStateLocal();
+    if (!state.startDate && currentUser.created_at) {
+      state.startDate = currentUser.created_at.split('T')[0];
+      saveState();
+      console.log('[telo] set startDate from auth:', state.startDate);
+    }
     document.getElementById('authScreen').style.display = 'none';
     initApp();
     loadFromSupabase().then(() => {
